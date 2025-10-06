@@ -20,7 +20,7 @@ export default function App() {
   }, [selectedCards])
 
   useEffect(() => {
-    if (emojiData.length && emojiData.length === matchingCards.length){
+    if (emojiData.length && emojiData.length === matchingCards.length) {
       console.log("Game is Over ")
       setIsGameOver(true)
     }
@@ -93,7 +93,13 @@ export default function App() {
     <main>
       <h1>Memory</h1>
       {!isGameOn && <Form handleSubmit={startGame} />}
-      {isGameOn && <MemoryCard handleClick={turnCard} data={emojiData} />}
+      {isGameOn && <MemoryCard
+        handleClick={turnCard}
+        data={emojiData}
+        selectedCards={selectedCards}
+        matchingCards={matchingCards}
+      />
+      }
 
     </main>
   )
