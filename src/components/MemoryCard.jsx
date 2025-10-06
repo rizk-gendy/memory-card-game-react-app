@@ -13,7 +13,6 @@ export default function MemoryCard({ handleClick, data, selectedCards, matchingC
             <li key={index} className='catd-item'>
                 <EmojiButton
                     content={decodeEntity(emoji.htmlCode[0])}
-                    style="btn btn--emoji"
                     handleClick={() => handleClick(emoji.name, index)}
                     selectedCardEntry={selectedCardEntry}
                     matchingCardEntry={matchingCardEntry}
