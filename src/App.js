@@ -29,10 +29,6 @@ export default function App() {
     }
   }
 
-  function turnCard() {
-    console.log("Memory Card clicked")
-  }
-
 
 
   function getRandomIndices(data) {
@@ -69,6 +65,9 @@ export default function App() {
   }
 
 
+  function turnCard(name , index) {
+    console.log("Memory Card clicked", name , index)
+  }
   return (
     <main>
       <h1>Memory</h1>
