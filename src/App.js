@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Form from "./components/Form";
 import MemoryCard from "./components/MemoryCard";
 
@@ -8,7 +8,23 @@ export default function App() {
 
   const [isGameOn, setIsGameOn] = useState(false)
   const [emojiData, setEmojiData] = useState([])
-  console.log('emojiData AT app', emojiData)
+  const [selectedCards, setSelectedCards] = useState([])
+  const [matchingCards, setMatchingCards] = useState([])
+  const [isGameOver, setIsGameOver] = useState(false)
+
+
+  useEffect(() => {
+    if (selectedCards.length === 2 && selectedCards[0].name === selectedCards[1].name) {
+      setMatchingCards((prevMatchingCards) => [...prevMatchingCards, ...selectedCards])
+    }
+  }, [selectedCards])
+
+  useEffect(() => {
+    if (emojiData.length && emojiData.length === matchingCards.length){
+      console.log("Game is Over ")
+      setIsGameOver(true)
+    }
+  }, [matchingCards])
 
 
   async function startGame(e) {
@@ -65,8 +81,13 @@ export default function App() {
   }
 
 
-  function turnCard(name , index) {
-    console.log("Memory Card clicked", name , index)
+  function turnCard(name, index) {
+    const selectedCardEntry = selectedCards.find((emoji) => emoji.index === index)
+    if (!selectedCardEntry && selectedCards.length < 2) {
+      setSelectedCards((prevSelectedCards) => [...prevSelectedCards, { name, index }])
+    } else if (!selectedCardEntry && selectedCards.length === 2) {
+      setSelectedCards([{ name, index }])
+    }
   }
   return (
     <main>
