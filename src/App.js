@@ -21,7 +21,8 @@ export default function App() {
       }
       const response = await res.json()
       const dataSlice = getDataSlice(response)
-      setEmojiData(dataSlice)
+      const shuffledDublicateEmojiArray = getEmojiArray(dataSlice)
+      setEmojiData(shuffledDublicateEmojiArray)
       setIsGameOn(true)
     } catch (e) {
       console.log("error", e)
@@ -52,7 +53,22 @@ export default function App() {
     const dataSlice = randomIndices.map((item) => data[item])
     return dataSlice
   }
-  
+
+  function shuffleArray(array) {
+    let arr = [...array]
+    for (let i = array.lengh - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * array.length)
+      [arr[i], arr[j]] = [arr[j], arr[i]]
+    }
+    return arr
+  }
+
+  function getEmojiArray(data) {
+    const pairedEmojiArray = [...data, ...data]
+    return shuffleArray(pairedEmojiArray)
+  }
+
+
   return (
     <main>
       <h1>Memory</h1>
