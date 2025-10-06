@@ -1,25 +1,63 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import Form from "./components/Form";
+import MemoryCard from "./components/MemoryCard";
 
-function App() {
+
+
+export default function App() {
+
+  const [isGameOn, setIsGameOn] = useState(false)
+  const [emojiData, setEmojiData] = useState([])
+  console.log('emojiData AT app', emojiData)
+
+
+  async function startGame(e) {
+    e.preventDefault()
+
+    try {
+      const res = await fetch("https://emojihub.yurace.pro/api/all/category/animals-and-nature")
+      if (!res.ok) {
+        throw new Error("could not fetch data from API")
+      }
+      const response = await res.json()
+      const dataSample = response.slice(0, 5)
+      console.log(getRandomIndices(response))
+      console.log(response)
+      setEmojiData(dataSample)
+      setIsGameOn(true)
+    } catch (e) {
+      console.log("error", e)
+
+    }
+
+
+  }
+
+  function turnCard() {
+    console.log("Memory Card clicked")
+  }
+
+
+
+  function getRandomIndices(data) {
+    const randomIndicesArray = []
+    for (let i = 0; i < 5; i++) {
+      const randomNum = Math.floor(Math.random() * data.length)
+      if (!randomIndicesArray.includes(randomNum)) {
+        randomIndicesArray.push(randomNum)
+      } else {
+        i--
+      }
+    }
+    return randomIndicesArray
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+    <main>
+      <h1>Memory</h1>
+      {!isGameOn && <Form handleSubmit={startGame} />}
+      {isGameOn && <MemoryCard handleClick={turnCard} data={emojiData} />}
 
-export default App;
+    </main>
+  )
+}
