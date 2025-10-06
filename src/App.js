@@ -20,17 +20,12 @@ export default function App() {
         throw new Error("could not fetch data from API")
       }
       const response = await res.json()
-      const dataSample = response.slice(0, 5)
-      console.log(getRandomIndices(response))
-      console.log(response)
-      setEmojiData(dataSample)
+      const dataSlice = getDataSlice(response)
+      setEmojiData(dataSlice)
       setIsGameOn(true)
     } catch (e) {
       console.log("error", e)
-
     }
-
-
   }
 
   function turnCard() {
@@ -52,6 +47,12 @@ export default function App() {
     return randomIndicesArray
   }
 
+  function getDataSlice(data) {
+    const randomIndices = getRandomIndices(data)
+    const dataSlice = randomIndices.map((item) => data[item])
+    return dataSlice
+  }
+  
   return (
     <main>
       <h1>Memory</h1>
