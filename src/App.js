@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import AssistiveTechInfo from "./components/AssistiveTechInfo";
+import ErrorCard from "./components/ErrorCard";
 import Form from "./components/Form";
 import GameOver from "./components/GameOver";
 import MemoryCard from "./components/MemoryCard";
@@ -13,6 +14,7 @@ export default function App() {
   const [selectedCards, setSelectedCards] = useState([])
   const [matchingCards, setMatchingCards] = useState([])
   const [areAllCardsMatched, setAreAllCardsMatched] = useState(false)
+  const [isError, setIsError] = useState(false)
 
 
   useEffect(() => {
@@ -43,6 +45,7 @@ export default function App() {
       setEmojiData(shuffledDublicateEmojiArray)
       setIsGameOn(true)
     } catch (e) {
+      setIsError(true)
       console.log("error", e)
     }
   }
@@ -96,6 +99,9 @@ export default function App() {
     setSelectedCards([])
     setMatchingCards([])
   }
+  function resetError() {
+    setIsError(false)
+  }
   return (
     <main>
       <h1>Memory</h1>
@@ -114,6 +120,9 @@ export default function App() {
         selectedCards={selectedCards}
         matchingCards={matchingCards}
       />
+      }
+      {isError && <ErrorCard
+        handleClick={resetError} />
       }
 
     </main>
