@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import RegularButton from "./RegularButton";
 
 export default function ErrorCard({ handleClick }) {

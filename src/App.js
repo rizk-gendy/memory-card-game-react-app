@@ -105,7 +105,7 @@ export default function App() {
   return (
     <main>
       <h1>Memory</h1>
-      {!isGameOn && <Form handleSubmit={startGame} />}
+      {!isGameOn && !isError && <Form handleSubmit={startGame} />}
       {isGameOn && !areAllCardsMatched &&
         <AssistiveTechInfo
           emojiData={emojiData}
