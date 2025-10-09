@@ -9,6 +9,12 @@ import MemoryCard from "./components/MemoryCard";
 
 export default function App() {
 
+
+  const initialFormData = {
+    category: "animals-and-nature",
+    number: 10
+  }
+  const [formData, setFormData] = useState(initialFormData)
   const [isGameOn, setIsGameOn] = useState(false)
   const [emojiData, setEmojiData] = useState([])
   const [selectedCards, setSelectedCards] = useState([])
@@ -35,7 +41,7 @@ export default function App() {
     e.preventDefault()
 
     try {
-      const res = await fetch("https://emojihub.yurace.pro/api/all/category/animals-and-nature")
+      const res = await fetch(`https://emojihub.yurace.pro/api/all/category/${formData.category}`)
       if (!res.ok) {
         throw new Error("could not fetch data from API")
       }
@@ -54,7 +60,7 @@ export default function App() {
 
   function getRandomIndices(data) {
     const randomIndicesArray = []
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < formData.number / 2; i++) {
       const randomNum = Math.floor(Math.random() * data.length)
       if (!randomIndicesArray.includes(randomNum)) {
         randomIndicesArray.push(randomNum)
@@ -102,10 +108,14 @@ export default function App() {
   function resetError() {
     setIsError(false)
   }
+  function handleFormChange(e) {
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))
+  }
   return (
     <main>
       <h1>Memory</h1>
-      {!isGameOn && !isError && <Form handleSubmit={startGame} />}
+      {!isGameOn && !isError &&
+        <Form handleSubmit={startGame} handleChange={handleFormChange} />}
       {isGameOn && !areAllCardsMatched &&
         <AssistiveTechInfo
           emojiData={emojiData}
