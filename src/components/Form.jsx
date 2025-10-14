@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { data } from "../data/data";
 import RegularButton from "./RegularButton";
 import Select from "./Select";
