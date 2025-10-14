@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import AssistiveTechInfo from "./components/AssistiveTechInfo";
+import ErrorCard from "./components/ErrorCard";
 import Form from "./components/Form";
 import GameOver from "./components/GameOver";
 import MemoryCard from "./components/MemoryCard";
@@ -8,11 +9,19 @@ import MemoryCard from "./components/MemoryCard";
 
 export default function App() {
 
+
+  const initialFormData = {
+    category: "animals-and-nature",
+    number: 10
+  }
+  const [isFirstRender, setIsFirstRender] = useState(true)
+  const [formData, setFormData] = useState(initialFormData)
   const [isGameOn, setIsGameOn] = useState(false)
   const [emojiData, setEmojiData] = useState([])
   const [selectedCards, setSelectedCards] = useState([])
   const [matchingCards, setMatchingCards] = useState([])
   const [areAllCardsMatched, setAreAllCardsMatched] = useState(false)
+  const [isError, setIsError] = useState(false)
 
 
   useEffect(() => {
@@ -33,7 +42,7 @@ export default function App() {
     e.preventDefault()
 
     try {
-      const res = await fetch("https://emojihub.yurace.pro/api/all/category/animals-and-nature")
+      const res = await fetch(`https://emojihub.yurace.pro/api/all/category/${formData.category}`)
       if (!res.ok) {
         throw new Error("could not fetch data from API")
       }
@@ -43,7 +52,12 @@ export default function App() {
       setEmojiData(shuffledDublicateEmojiArray)
       setIsGameOn(true)
     } catch (e) {
+      setIsError(true)
       console.log("error", e)
+
+    } finally {
+      setIsFirstRender(false)
+
     }
   }
 
@@ -51,7 +65,7 @@ export default function App() {
 
   function getRandomIndices(data) {
     const randomIndicesArray = []
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < formData.number / 2; i++) {
       const randomNum = Math.floor(Math.random() * data.length)
       if (!randomIndicesArray.includes(randomNum)) {
         randomIndicesArray.push(randomNum)
@@ -96,10 +110,17 @@ export default function App() {
     setSelectedCards([])
     setMatchingCards([])
   }
+  function resetError() {
+    setIsError(false)
+  }
+  function handleFormChange(e) {
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))
+  }
   return (
     <main>
       <h1>Memory</h1>
-      {!isGameOn && <Form handleSubmit={startGame} />}
+      {!isGameOn && !isError &&
+        <Form handleSubmit={startGame} handleChange={handleFormChange} isFirstRender={isFirstRender} />}
       {isGameOn && !areAllCardsMatched &&
         <AssistiveTechInfo
           emojiData={emojiData}
@@ -114,6 +135,9 @@ export default function App() {
         selectedCards={selectedCards}
         matchingCards={matchingCards}
       />
+      }
+      {isError && <ErrorCard
+        handleClick={resetError} />
       }
 
     </main>
