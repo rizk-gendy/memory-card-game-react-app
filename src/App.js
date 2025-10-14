@@ -14,6 +14,7 @@ export default function App() {
     category: "animals-and-nature",
     number: 10
   }
+  const [isFirstRender, setIsFirstRender] = useState(true)
   const [formData, setFormData] = useState(initialFormData)
   const [isGameOn, setIsGameOn] = useState(false)
   const [emojiData, setEmojiData] = useState([])
@@ -53,6 +54,10 @@ export default function App() {
     } catch (e) {
       setIsError(true)
       console.log("error", e)
+
+    } finally {
+      setIsFirstRender(false)
+
     }
   }
 
@@ -115,7 +120,7 @@ export default function App() {
     <main>
       <h1>Memory</h1>
       {!isGameOn && !isError &&
-        <Form handleSubmit={startGame} handleChange={handleFormChange} />}
+        <Form handleSubmit={startGame} handleChange={handleFormChange} isFirstRender={isFirstRender} />}
       {isGameOn && !areAllCardsMatched &&
         <AssistiveTechInfo
           emojiData={emojiData}

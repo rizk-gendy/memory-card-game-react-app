@@ -1,11 +1,25 @@
+import { useRef } from "react";
 import { data } from "../data/data";
 import RegularButton from "./RegularButton";
 import Select from "./Select";
 
-export default function Form({ handleSubmit, handleChange }) {
+export default function Form({ handleSubmit, handleChange, isFirstRender }) {
+
+
+    const difRef = useRef()
+
+
+    useEffect(() => {
+        !isFirstRender && difRef.current.focus()
+
+    }, [])
+
 
     return (
-        <div className="form-container" >
+        <div className="form-container" ref={difRef} tabIndex={-1} >
+            <p className="p--regular">
+                Customize the game by selecting an emoji category and a number of memory cards.
+            </p>
             <form className="wrapper">
                 <Select
                     label="Select Emoji Category"
